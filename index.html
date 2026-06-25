@@ -170,7 +170,8 @@ h1,h2,h3,h4{font-family:'Anuphan',sans-serif; margin:0;}
 .school-name{font-weight:700; font-size:.98rem; line-height:1.35;}
 .school-network{font-size:.76rem; color:var(--ink-soft); margin-top:3px;}
 .overall-chip{
-  font-size:.74rem; font-weight:700; padding:4px 10px; border-radius:20px; flex-shrink:0; white-space:nowrap;
+  font-size:.78rem; font-weight:800; padding:5px 13px; border-radius:8px; flex-shrink:0; white-space:nowrap;
+  border:1.5px solid currentColor;
 }
 .school-meta{font-size:.78rem; color:var(--ink-soft); margin-top:10px; display:flex; flex-direction:column; gap:3px;}
 .dot-row{display:flex; gap:4px; margin-top:12px; flex-wrap:wrap;}
@@ -194,8 +195,11 @@ thead th{
 tbody td{padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top;}
 tbody tr:hover{background:#FAFCF8;}
 .result-pill{
-  display:inline-flex; align-items:center; padding:3px 11px; border-radius:20px;
-  font-size:.78rem; font-weight:700; white-space:nowrap;
+  display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:8px;
+  font-size:.82rem; font-weight:800; white-space:nowrap; border:1.5px solid currentColor;
+}
+.result-pill::before{
+  content:""; width:8px; height:8px; border-radius:50%; background:currentColor; flex-shrink:0;
 }
 .detail-toggle-row td{padding:0; border-bottom:1px solid var(--line);}
 .detail-panel{padding:16px 20px; background:var(--cream); display:none;}
@@ -262,17 +266,18 @@ tbody tr:hover{background:#FAFCF8;}
 }
 .chart-row .chart-fill{height:100%; border-radius:8px; transition:width .5s ease; display:flex; align-items:center;}
 .chart-row .chart-val{
-  flex:0 0 84px; font-size:.84rem; font-weight:700; text-align:right; white-space:nowrap;
+  flex:0 0 auto; font-size:.82rem; font-weight:800; text-align:center; white-space:nowrap;
+  padding:5px 13px; border-radius:8px; border:1.5px solid currentColor;
 }
 
-.detail-cards-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px;}
+.detail-cards-grid{display:flex; flex-direction:column; gap:14px;}
 .detail-card{
-  background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:20px;
+  background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:22px;
   box-shadow:var(--shadow);
 }
-.detail-card .dc-label{font-size:.95rem; font-weight:700; color:var(--ink); line-height:1.45; margin-bottom:10px;}
-.detail-card .result-pill{font-size:.86rem; padding:5px 14px;}
-.detail-card .dc-note{font-size:.9rem; color:var(--ink); line-height:1.7; margin-top:12px; padding-top:12px; border-top:1px solid var(--line);}
+.detail-card .dc-label{font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.5; margin-bottom:12px;}
+.detail-card .result-pill{font-size:.9rem; padding:6px 16px;}
+.detail-card .dc-note{font-size:.95rem; color:var(--ink); line-height:1.8; margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
 
 .detail-section-title{font-size:1.15rem; font-weight:700; margin:30px 0 16px;}
 
@@ -791,7 +796,7 @@ function openDetail(school){
           <div class="chart-track">
             <div class="chart-fill" style="width:${pct}%; background:${dc.bg};"></div>
           </div>
-          <div class="chart-val" style="color:${dc.fg};">${escapeHtml(lbl)}</div>
+          <div class="chart-val" style="color:${dc.fg};background:${dc.soft};">${escapeHtml(lbl)}</div>
         </div>`;
       }).join('')}
     </div>
