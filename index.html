@@ -214,26 +214,37 @@ tbody tr:hover{background:#FAFCF8;}
   font-size:.78rem; color:var(--ink-soft); font-family:'Sarabun',sans-serif;
 }
 
-/* ===== Full-page school detail view ===== */
-#detailSection{display:none;}
-.detail-back{
-  display:inline-flex; align-items:center; gap:8px; background:var(--paper); border:1px solid var(--line);
-  border-radius:30px; padding:9px 18px; font-size:.88rem; font-weight:600; color:var(--ink-soft);
-  cursor:pointer; margin-bottom:20px; box-shadow:var(--shadow); transition:transform .15s ease;
+/* ===== School detail modal (popup) ===== */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(15,25,20,0.55); backdrop-filter:blur(3px);
+  display:none; align-items:flex-start; justify-content:center; padding:30px 16px; z-index:100;
+  overflow-y:auto;
 }
-.detail-back:hover{transform:translateX(-3px);}
+.modal-overlay.show{display:flex;}
+.modal-box{
+  background:var(--cream); border-radius:24px; max-width:880px; width:100%;
+  box-shadow:var(--shadow-lg); padding:0; position:relative; margin-bottom:30px;
+}
+.modal-close-btn{
+  position:absolute; top:18px; right:18px; z-index:5;
+  border:none; background:rgba(255,255,255,0.25); color:#fff; width:38px; height:38px; border-radius:50%;
+  cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center;
+  transition:background .15s ease;
+}
+.modal-close-btn:hover{background:rgba(255,255,255,0.4);}
+.modal-box-inner{padding:28px;}
 
 .detail-header{
   background:linear-gradient(135deg,#103B2E 0%, #0E9F6E 55%, #3FA9F5 130%);
-  border-radius:24px; padding:32px; color:#fff; margin-bottom:24px; position:relative; overflow:hidden;
+  border-radius:24px 24px 0 0; padding:32px 28px; color:#fff; position:relative; overflow:hidden;
 }
 .detail-header::after{
   content:"";position:absolute; right:-60px; top:-60px; width:240px; height:240px;
   border-radius:50%; background:rgba(255,255,255,0.08);
 }
-.detail-header h2{font-size:1.7rem; font-weight:800; line-height:1.25; position:relative; z-index:1;}
+.detail-header h2{font-size:1.5rem; font-weight:800; line-height:1.25; position:relative; z-index:1; padding-right:40px;}
 .detail-header .meta-row{
-  display:flex; flex-wrap:wrap; gap:18px; margin-top:14px; font-size:.92rem; opacity:.95; position:relative; z-index:1;
+  display:flex; flex-wrap:wrap; gap:18px; margin-top:14px; font-size:.88rem; opacity:.95; position:relative; z-index:1;
 }
 .detail-header .meta-row span{display:flex; align-items:center; gap:6px;}
 .detail-overall-badge{
@@ -241,8 +252,8 @@ tbody tr:hover{background:#FAFCF8;}
   padding:8px 18px; border-radius:30px; font-size:1rem; font-weight:700; margin-top:18px; position:relative; z-index:1;
 }
 
-.detail-stats-row{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px;}
-@media(max-width:700px){.detail-stats-row{grid-template-columns:1fr;}}
+.detail-stats-row{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:24px 0;}
+@media(max-width:600px){.detail-stats-row{grid-template-columns:1fr;}}
 .detail-stat-card{
   background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:18px 20px;
   box-shadow:var(--shadow); text-align:center;
@@ -252,22 +263,22 @@ tbody tr:hover{background:#FAFCF8;}
 
 .chart-card{
   background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
-  box-shadow:var(--shadow); padding:26px; margin-bottom:24px;
+  box-shadow:var(--shadow); padding:24px; margin-bottom:24px;
 }
-.chart-card h3{font-size:1.05rem; font-weight:700; margin-bottom:18px;}
+.chart-card h3{font-size:1.02rem; font-weight:700; margin-bottom:18px;}
 .chart-row{display:flex; align-items:center; gap:14px; margin-bottom:12px;}
 .chart-row .chart-label{
-  flex:0 0 220px; font-size:.84rem; color:var(--ink); line-height:1.4;
+  flex:0 0 200px; font-size:.82rem; color:var(--ink); line-height:1.4;
   white-space:normal; overflow-wrap:break-word;
 }
-@media(max-width:760px){.chart-row{flex-wrap:wrap;} .chart-row .chart-label{flex:1 1 100%;}}
+@media(max-width:600px){.chart-row{flex-wrap:wrap;} .chart-row .chart-label{flex:1 1 100%;}}
 .chart-row .chart-track{
-  flex:1; height:26px; background:var(--cream); border-radius:8px; overflow:hidden; position:relative; min-width:80px;
+  flex:1; height:24px; background:var(--cream); border-radius:8px; overflow:hidden; position:relative; min-width:60px;
 }
 .chart-row .chart-fill{height:100%; border-radius:8px; transition:width .5s ease; display:flex; align-items:center;}
 .chart-row .chart-val{
-  flex:0 0 auto; font-size:.82rem; font-weight:800; text-align:center; white-space:nowrap;
-  padding:5px 13px; border-radius:8px; border:1.5px solid currentColor;
+  flex:0 0 auto; font-size:.8rem; font-weight:800; text-align:center; white-space:nowrap;
+  padding:4px 12px; border-radius:8px; border:1.5px solid currentColor;
 }
 
 .detail-cards-grid{display:flex; flex-direction:column; gap:14px;}
@@ -275,11 +286,11 @@ tbody tr:hover{background:#FAFCF8;}
   background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:22px;
   box-shadow:var(--shadow);
 }
-.detail-card .dc-label{font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.5; margin-bottom:12px;}
-.detail-card .result-pill{font-size:.9rem; padding:6px 16px;}
-.detail-card .dc-note{font-size:.95rem; color:var(--ink); line-height:1.8; margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
+.detail-card .dc-label{font-size:1rem; font-weight:700; color:var(--ink); line-height:1.5; margin-bottom:12px;}
+.detail-card .result-pill{font-size:.88rem; padding:6px 16px;}
+.detail-card .dc-note{font-size:.92rem; color:var(--ink); line-height:1.8; margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
 
-.detail-section-title{font-size:1.15rem; font-weight:700; margin:30px 0 16px;}
+.detail-section-title{font-size:1.1rem; font-weight:700; margin:28px 0 16px;}
 
 .empty-state{text-align:center; padding:60px 20px; color:var(--ink-soft);}
 .empty-state .emoji{font-size:2.4rem; margin-bottom:10px;}
@@ -421,12 +432,14 @@ footer{text-align:center; font-size:.78rem; color:var(--ink-soft); padding:30px 
     </div>
   </div>
 
-  <div id="detailSection">
-    <button class="detail-back" id="detailBackBtn">← กลับไปหน้ารายโรงเรียน</button>
+  <footer>กลุ่มนิเทศ ติดตามและประเมินผลการจัดการศึกษา · สพป.เชียงใหม่ เขต 2 · ข้อมูลอัปเดตอัตโนมัติจาก Google Sheets</footer>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close-btn" id="modalCloseBtn">✕</button>
     <div id="detailContent"></div>
   </div>
-
-  <footer>กลุ่มนิเทศ ติดตามและประเมินผลการจัดการศึกษา · สพป.เชียงใหม่ เขต 2 · ข้อมูลอัปเดตอัตโนมัติจาก Google Sheets</footer>
 </div>
 
 
@@ -801,7 +814,8 @@ function openDetail(school){
         <span>📅 ${escapeHtml(school.date || 'ยังไม่นิเทศ')}</span>
       </div>
       ${overall ? `<div class="detail-overall-badge">ผลรวม: ${escapeHtml(overall)}</div>` : ''}
-    </div>`;
+    </div>
+    <div class="modal-box-inner">`;
 
   if(answered.length === 0){
     html += `<div class="empty-state"><div class="emoji">📋</div>ยังไม่มีข้อมูลผลการนิเทศสำหรับโรงเรียนนี้</div>`;
@@ -854,18 +868,24 @@ function openDetail(school){
     </div>`;
   }
 
+  html += `</div>`; // ปิด .modal-box-inner
+
   document.getElementById('detailContent').innerHTML = html;
-  document.getElementById('mainViews').style.display = 'none';
-  document.getElementById('detailSection').style.display = '';
-  window.scrollTo({top:0, behavior:'smooth'});
+  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('modalOverlay').scrollTop = 0;
 }
 
 function closeDetail(){
-  document.getElementById('detailSection').style.display = 'none';
-  document.getElementById('mainViews').style.display = '';
+  document.getElementById('modalOverlay').classList.remove('show');
 }
 
-document.getElementById('detailBackBtn').addEventListener('click', closeDetail);
+document.getElementById('modalCloseBtn').addEventListener('click', closeDetail);
+document.getElementById('modalOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'modalOverlay') closeDetail();
+});
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') closeDetail();
+});
 
 document.getElementById('searchInput').addEventListener('input', applyFilters);
 document.getElementById('networkSelect').addEventListener('change', applyFilters);
