@@ -359,8 +359,14 @@ footer{text-align:center; font-size:.78rem; color:var(--ink-soft); padding:30px 
         </select>
       </div>
       <div class="field">
-        <label>ผลการนิเทศโดยรวม</label>
-        <select id="resultSelect">
+        <label>ดูผลรายด้าน</label>
+        <select id="dimSelect">
+          <option value="">เลือกด้านที่ต้องการดู...</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>ระดับผลของด้านนั้น</label>
+        <select id="resultSelect" disabled>
           <option value="">ทุกระดับผล</option>
           <option value="ดีเยี่ยม">ดีเยี่ยม</option>
           <option value="ดี">ดี</option>
@@ -599,6 +605,7 @@ function parseSheetData(data){
   });
 
   populateNetworkFilter();
+  populateDimFilter();
 }
 
 function populateNetworkFilter(){
@@ -608,17 +615,33 @@ function populateNetworkFilter(){
     networks.map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
 }
 
+function populateDimFilter(){
+  const sel = document.getElementById('dimSelect');
+  if(sel.options.length > 1) return; // เติมรายการแค่ครั้งเดียว ไม่ทับตัวเลือกที่ผู้ใช้กำลังเลือกอยู่
+  sel.innerHTML = '<option value="">เลือกด้านที่ต้องการดู...</option>' +
+    ALL_DIMS.map((d,i)=>`<option value="${i}">${escapeHtml(d.full)}</option>`).join('');
+}
+
 function applyFilters(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const net = document.getElementById('networkSelect').value;
+  const dimIdx = document.getElementById('dimSelect').value;
   const res = document.getElementById('resultSelect').value;
+
+  // เปิด/ปิดตัวเลือกระดับผล ตามว่าได้เลือกด้านหรือยัง
+  const resultSelectEl = document.getElementById('resultSelect');
+  resultSelectEl.disabled = (dimIdx === '');
+  if(dimIdx === '' && resultSelectEl.value !== ''){
+    resultSelectEl.value = '';
+  }
 
   filtered = schools.filter(s=>{
     if(q && !s.name.toLowerCase().includes(q)) return false;
     if(net && s.network !== net) return false;
-    if(res){
-      const overall = overallScore(s) || '';
-      if(overall !== res) return false;
+    if(dimIdx !== '' && res){
+      const dim = s.dims[parseInt(dimIdx)];
+      const lbl = dim ? resultLabel(dim.result) : '';
+      if(lbl !== res) return false;
     }
     return true;
   });
@@ -648,7 +671,11 @@ function renderHero(){
 
 function renderOverview(){
   const grid = document.getElementById('schoolGrid');
-  document.getElementById('overviewCount').textContent = `แสดง ${filtered.length} จาก ${schools.length} โรงเรียน`;
+  const dimIdx = document.getElementById('dimSelect').value;
+  const selectedDim = dimIdx !== '' ? ALL_DIMS[parseInt(dimIdx)] : null;
+  document.getElementById('overviewCount').textContent = selectedDim
+    ? `กำลังดู: ${selectedDim.short} · แสดง ${filtered.length} จาก ${schools.length} โรงเรียน`
+    : `แสดง ${filtered.length} จาก ${schools.length} โรงเรียน`;
 
   if(filtered.length===0){
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="emoji">🔍</div>ไม่พบโรงเรียนที่ตรงกับเงื่อนไข</div>`;
@@ -662,6 +689,17 @@ function renderOverview(){
       const dc = resultColor(d.result);
       return `<span class="d" style="background:${dc.bg}" title="${escapeHtml(d.label)}: ${escapeHtml(d.result||'ยังไม่นิเทศ')}"></span>`;
     }).join('');
+
+    let dimBadgeHtml = '';
+    if(selectedDim){
+      const dimResult = s.dims[parseInt(dimIdx)];
+      const dc = resultColor(dimResult ? dimResult.result : '');
+      dimBadgeHtml = `
+      <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--line);">
+        <div style="font-size:.74rem; color:var(--ink-soft); margin-bottom:5px;">${escapeHtml(selectedDim.short)}</div>
+        <span class="result-pill" style="background:${dc.soft};color:${dc.fg};">${escapeHtml(resultLabel(dimResult ? dimResult.result : '') || 'ยังไม่นิเทศ')}</span>
+      </div>`;
+    }
 
     return `
     <div class="school-card" data-no="${escapeHtml(s.no)}">
@@ -677,6 +715,7 @@ function renderOverview(){
         <span>📅 ${escapeHtml(s.date || 'ยังไม่นิเทศ')}</span>
       </div>
       <div class="dot-row">${dotsHtml}</div>
+      ${dimBadgeHtml}
       ${!overall ? '<span class="no-data-tag">ยังไม่มีข้อมูลการนิเทศ</span>' : ''}
     </div>`;
   }).join('');
@@ -830,6 +869,7 @@ document.getElementById('detailBackBtn').addEventListener('click', closeDetail);
 
 document.getElementById('searchInput').addEventListener('input', applyFilters);
 document.getElementById('networkSelect').addEventListener('change', applyFilters);
+document.getElementById('dimSelect').addEventListener('change', applyFilters);
 document.getElementById('resultSelect').addEventListener('change', applyFilters);
 
 document.getElementById('btnOverview').addEventListener('click', ()=>{
