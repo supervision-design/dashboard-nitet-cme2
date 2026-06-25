@@ -18,10 +18,8 @@
   --excellent-bg:#E7F9F0;
   --good:#2F86E0;          /* ดี - ฟ้าสด */
   --good-bg:#EAF3FD;
-  --fair:#F5A524;          /* พอใช้ - ส้มทอง */
-  --fair-bg:#FEF3E0;
-  --improve:#E5484D;       /* ควรปรับปรุง - แดงสด */
-  --improve-bg:#FDEBEC;
+  --improve:#F0653E;       /* ต้องพัฒนา - ส้มแดงสด */
+  --improve-bg:#FDEDE7;
   --empty:#C7CDC6;
 
   --sun:#FFC542;
@@ -212,31 +210,71 @@ tbody tr:hover{background:#FAFCF8;}
   font-size:.78rem; color:var(--ink-soft); font-family:'Sarabun',sans-serif;
 }
 
-/* ===== Modal (school detail) ===== */
-.modal-overlay{
-  position:fixed; inset:0; background:rgba(15,25,20,0.45); backdrop-filter:blur(2px);
-  display:none; align-items:center; justify-content:center; padding:20px; z-index:50;
+/* ===== Full-page school detail view ===== */
+#detailSection{display:none;}
+.detail-back{
+  display:inline-flex; align-items:center; gap:8px; background:var(--paper); border:1px solid var(--line);
+  border-radius:30px; padding:9px 18px; font-size:.88rem; font-weight:600; color:var(--ink-soft);
+  cursor:pointer; margin-bottom:20px; box-shadow:var(--shadow); transition:transform .15s ease;
 }
-.modal-overlay.show{display:flex;}
-.modal{
-  background:var(--paper); border-radius:20px; max-width:760px; width:100%;
-  max-height:86vh; overflow-y:auto; box-shadow:var(--shadow-lg); padding:0;
+.detail-back:hover{transform:translateX(-3px);}
+
+.detail-header{
+  background:linear-gradient(135deg,#103B2E 0%, #0E9F6E 55%, #3FA9F5 130%);
+  border-radius:24px; padding:32px; color:#fff; margin-bottom:24px; position:relative; overflow:hidden;
 }
-.modal-head{
-  padding:22px 26px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--paper);
-  display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
+.detail-header::after{
+  content:"";position:absolute; right:-60px; top:-60px; width:240px; height:240px;
+  border-radius:50%; background:rgba(255,255,255,0.08);
 }
-.modal-head h3{font-size:1.15rem;}
-.modal-head p{font-size:.82rem; color:var(--ink-soft); margin-top:4px;}
-.modal-close{
-  border:none; background:var(--cream); width:32px;height:32px; border-radius:50%;
-  cursor:pointer; font-size:16px; flex-shrink:0; color:var(--ink-soft);
+.detail-header h2{font-size:1.7rem; font-weight:800; line-height:1.25; position:relative; z-index:1;}
+.detail-header .meta-row{
+  display:flex; flex-wrap:wrap; gap:18px; margin-top:14px; font-size:.92rem; opacity:.95; position:relative; z-index:1;
 }
-.modal-body{padding:22px 26px;}
-.modal-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:10px;}
-.modal-item{border:1px solid var(--line); border-radius:12px; padding:12px 14px;}
-.modal-item .label{font-size:.76rem; font-weight:700; color:var(--ink-soft);}
-.modal-item .note{font-size:.82rem; margin-top:6px; line-height:1.55; color:var(--ink);}
+.detail-header .meta-row span{display:flex; align-items:center; gap:6px;}
+.detail-overall-badge{
+  display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.18);
+  padding:8px 18px; border-radius:30px; font-size:1rem; font-weight:700; margin-top:18px; position:relative; z-index:1;
+}
+
+.detail-stats-row{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px;}
+@media(max-width:700px){.detail-stats-row{grid-template-columns:1fr;}}
+.detail-stat-card{
+  background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:18px 20px;
+  box-shadow:var(--shadow); text-align:center;
+}
+.detail-stat-card .num{font-size:2.1rem; font-weight:800; font-family:'Anuphan',sans-serif;}
+.detail-stat-card .lbl{font-size:.85rem; color:var(--ink-soft); margin-top:4px;}
+
+.chart-card{
+  background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:26px; margin-bottom:24px;
+}
+.chart-card h3{font-size:1.05rem; font-weight:700; margin-bottom:18px;}
+.chart-row{display:flex; align-items:center; gap:14px; margin-bottom:12px;}
+.chart-row .chart-label{
+  flex:0 0 220px; font-size:.84rem; color:var(--ink); line-height:1.4;
+  white-space:normal; overflow-wrap:break-word;
+}
+@media(max-width:760px){.chart-row{flex-wrap:wrap;} .chart-row .chart-label{flex:1 1 100%;}}
+.chart-row .chart-track{
+  flex:1; height:26px; background:var(--cream); border-radius:8px; overflow:hidden; position:relative; min-width:80px;
+}
+.chart-row .chart-fill{height:100%; border-radius:8px; transition:width .5s ease; display:flex; align-items:center;}
+.chart-row .chart-val{
+  flex:0 0 84px; font-size:.84rem; font-weight:700; text-align:right; white-space:nowrap;
+}
+
+.detail-cards-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px;}
+.detail-card{
+  background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:20px;
+  box-shadow:var(--shadow);
+}
+.detail-card .dc-label{font-size:.95rem; font-weight:700; color:var(--ink); line-height:1.45; margin-bottom:10px;}
+.detail-card .result-pill{font-size:.86rem; padding:5px 14px;}
+.detail-card .dc-note{font-size:.9rem; color:var(--ink); line-height:1.7; margin-top:12px; padding-top:12px; border-top:1px solid var(--line);}
+
+.detail-section-title{font-size:1.15rem; font-weight:700; margin:30px 0 16px;}
 
 .empty-state{text-align:center; padding:60px 20px; color:var(--ink-soft);}
 .empty-state .emoji{font-size:2.4rem; margin-bottom:10px;}
@@ -267,126 +305,119 @@ footer{text-align:center; font-size:.78rem; color:var(--ink-soft); padding:30px 
     <div id="statusText">กำลังดึงข้อมูลจาก Google Sheets...</div>
   </div>
 
-  <div class="hero" id="heroSection" style="display:none;">
-    <div class="hero-card main">
-      <div class="hero-eyebrow">ความคืบหน้าการนิเทศ</div>
-      <div class="hero-number" id="heroProgress">0 / 0</div>
-      <div class="hero-sub" id="heroProgressSub">โรงเรียนที่นิเทศแล้ว</div>
-      <div class="progress-track"><div class="progress-fill" id="heroProgressBar" style="width:0%"></div></div>
-    </div>
-    <div class="hero-card">
-      <div class="mini-stat">
-        <div class="mini-badge" style="background:var(--excellent-bg); color:var(--excellent);">🌟</div>
-        <div>
-          <div class="hero-eyebrow">ดีเยี่ยมเฉลี่ย</div>
-          <div class="hero-number" style="font-size:1.7rem;" id="heroExcellentPct">0%</div>
+  <div id="mainViews">
+    <div class="hero" id="heroSection" style="display:none;">
+      <div class="hero-card main">
+        <div class="hero-eyebrow">ความคืบหน้าการนิเทศ</div>
+        <div class="hero-number" id="heroProgress">0 / 0</div>
+        <div class="hero-sub" id="heroProgressSub">โรงเรียนที่นิเทศแล้ว</div>
+        <div class="progress-track"><div class="progress-fill" id="heroProgressBar" style="width:0%"></div></div>
+      </div>
+      <div class="hero-card">
+        <div class="mini-stat">
+          <div class="mini-badge" style="background:var(--excellent-bg); color:var(--excellent);">🌟</div>
+          <div>
+            <div class="hero-eyebrow">ดีเยี่ยมเฉลี่ย</div>
+            <div class="hero-number" style="font-size:1.7rem;" id="heroExcellentPct">0%</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="mini-stat">
+          <div class="mini-badge" style="background:var(--good-bg); color:var(--good);">✓</div>
+          <div>
+            <div class="hero-eyebrow">เครือข่ายที่นิเทศแล้ว</div>
+            <div class="hero-number" style="font-size:1.7rem;" id="heroNetworks">0</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="mini-stat">
+          <div class="mini-badge" style="background:var(--good-bg); color:var(--sky);">📋</div>
+          <div>
+            <div class="hero-eyebrow">ด้านที่ประเมิน</div>
+            <div class="hero-number" style="font-size:1.7rem;" id="heroDims">17</div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="hero-card">
-      <div class="mini-stat">
-        <div class="mini-badge" style="background:var(--good-bg); color:var(--good);">✓</div>
-        <div>
-          <div class="hero-eyebrow">เครือข่ายที่นิเทศแล้ว</div>
-          <div class="hero-number" style="font-size:1.7rem;" id="heroNetworks">0</div>
+
+    <div class="controls" id="controlsSection" style="display:none;">
+      <div class="field" style="flex:1.4;">
+        <label>ค้นหา / เลือกโรงเรียน</label>
+        <input type="text" id="searchInput" placeholder="พิมพ์ชื่อโรงเรียน...">
+      </div>
+      <div class="field">
+        <label>เครือข่ายพัฒนาคุณภาพการศึกษา</label>
+        <select id="networkSelect">
+          <option value="">ทุกเครือข่าย</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>ผลการนิเทศโดยรวม</label>
+        <select id="resultSelect">
+          <option value="">ทุกระดับผล</option>
+          <option value="ดีเยี่ยม">ดีเยี่ยม</option>
+          <option value="ดี">ดี</option>
+          <option value="ต้องพัฒนา">ต้องพัฒนา</option>
+        </select>
+      </div>
+      <div class="viewtoggle">
+        <button id="btnOverview" class="active">ภาพรวม</button>
+        <button id="btnTable">ตารางละเอียด</button>
+      </div>
+    </div>
+
+    <div class="legend" id="legendRow" style="display:none;">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--excellent);"></span>ดีเยี่ยม</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--good);"></span>ดี</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--improve);"></span>ต้องพัฒนา</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--empty);"></span>ยังไม่นิเทศ</div>
+    </div>
+
+    <div id="overviewSection">
+      <div class="section-title">
+        <h2>รายโรงเรียน</h2>
+        <span class="count" id="overviewCount"></span>
+      </div>
+      <div class="school-grid" id="schoolGrid"></div>
+    </div>
+
+    <div id="tableSection" style="display:none;">
+      <div class="section-title">
+        <h2>ตารางผลการนิเทศรายด้าน</h2>
+        <span class="count" id="tableCount"></span>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th>ที่</th>
+                <th>ชื่อโรงเรียน</th>
+                <th>เครือข่าย</th>
+                <th>ผู้บริหาร</th>
+                <th>วันที่นิเทศ</th>
+                <th>ด้านที่ 1-6</th>
+                <th>ด้านที่ 7</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
         </div>
       </div>
     </div>
-    <div class="hero-card">
-      <div class="mini-stat">
-        <div class="mini-badge" style="background:var(--fair-bg); color:var(--fair);">📋</div>
-        <div>
-          <div class="hero-eyebrow">ด้านที่ประเมิน</div>
-          <div class="hero-number" style="font-size:1.7rem;" id="heroDims">17</div>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <div class="controls" id="controlsSection" style="display:none;">
-    <div class="field" style="flex:1.4;">
-      <label>ค้นหา / เลือกโรงเรียน</label>
-      <input type="text" id="searchInput" placeholder="พิมพ์ชื่อโรงเรียน...">
-    </div>
-    <div class="field">
-      <label>เครือข่ายพัฒนาคุณภาพการศึกษา</label>
-      <select id="networkSelect">
-        <option value="">ทุกเครือข่าย</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>ผลการนิเทศโดยรวม</label>
-      <select id="resultSelect">
-        <option value="">ทุกระดับผล</option>
-        <option value="ดีเยี่ยม">ดีเยี่ยม</option>
-        <option value="ดี">ดี</option>
-        <option value="พอใช้">พอใช้</option>
-        <option value="ปรับปรุง">ควรปรับปรุง</option>
-      </select>
-    </div>
-    <div class="viewtoggle">
-      <button id="btnOverview" class="active">ภาพรวม</button>
-      <button id="btnTable">ตารางละเอียด</button>
-    </div>
-  </div>
-
-  <div class="legend" id="legendRow" style="display:none;">
-    <div class="legend-item"><span class="legend-dot" style="background:var(--excellent);"></span>ดีเยี่ยม</div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--good);"></span>ดี</div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--fair);"></span>พอใช้</div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--improve);"></span>ควรปรับปรุง</div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--empty);"></span>ยังไม่นิเทศ</div>
-  </div>
-
-  <div id="overviewSection">
-    <div class="section-title">
-      <h2>รายโรงเรียน</h2>
-      <span class="count" id="overviewCount"></span>
-    </div>
-    <div class="school-grid" id="schoolGrid"></div>
-  </div>
-
-  <div id="tableSection" style="display:none;">
-    <div class="section-title">
-      <h2>ตารางผลการนิเทศรายด้าน</h2>
-      <span class="count" id="tableCount"></span>
-    </div>
-    <div class="table-wrap">
-      <div class="table-scroll">
-        <table id="dataTable">
-          <thead>
-            <tr>
-              <th>ที่</th>
-              <th>ชื่อโรงเรียน</th>
-              <th>เครือข่าย</th>
-              <th>ผู้บริหาร</th>
-              <th>วันที่นิเทศ</th>
-              <th>ด้านที่ 1-6</th>
-              <th>ด้านที่ 7</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
+  <div id="detailSection">
+    <button class="detail-back" id="detailBackBtn">← กลับไปหน้ารายโรงเรียน</button>
+    <div id="detailContent"></div>
   </div>
 
   <footer>กลุ่มนิเทศ ติดตามและประเมินผลการจัดการศึกษา · สพป.เชียงใหม่ เขต 2 · ข้อมูลอัปเดตอัตโนมัติจาก Google Sheets</footer>
 </div>
 
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-head">
-      <div>
-        <h3 id="modalTitle"></h3>
-        <p id="modalSub"></p>
-      </div>
-      <button class="modal-close" id="modalClose">✕</button>
-    </div>
-    <div class="modal-body" id="modalBody"></div>
-  </div>
-</div>
 
 <script>
 const SHEET_ID = "1lpLstaboJlvpIwkdZJ-c3l0Pf6detU3QUEjr_e6R8Gg";
@@ -430,30 +461,35 @@ let schools = [];
 let filtered = [];
 
 function resultColor(val){
-  if(!val) return {bg:'var(--empty)', text:'#fff', fg:'#8B928B'};
+  if(!val) return {key:'empty', bg:'var(--empty)', text:'#fff', soft:'#F1F2EF', fg:'#8B928B'};
   const v = val.trim();
   if(v.includes('ดีเยี่ยม')) return {key:'excellent', bg:'var(--excellent)', text:'#fff', soft:'var(--excellent-bg)', fg:'var(--excellent)'};
-  if(v==='ดี') return {key:'good', bg:'var(--good)', text:'#fff', soft:'var(--good-bg)', fg:'var(--good)'};
-  if(v.includes('พอใช้')) return {key:'fair', bg:'var(--fair)', text:'#fff', soft:'var(--fair-bg)', fg:'var(--fair)'};
-  if(v.includes('ปรับปรุง')) return {key:'improve', bg:'var(--improve)', text:'#fff', soft:'var(--improve-bg)', fg:'var(--improve)'};
-  return {key:'unknown', bg:'var(--empty)', text:'#fff', soft:'#F1F2EF', fg:'var(--ink-soft)'};
+  if(v==='ดี' || v.includes('ดี ')) return {key:'good', bg:'var(--good)', text:'#fff', soft:'var(--good-bg)', fg:'var(--good)'};
+  // ทุกผลที่ไม่ใช่ "ดีเยี่ยม" หรือ "ดี" ถือว่าต้องพัฒนา (พอใช้ / ปรับปรุง / อื่นๆ)
+  return {key:'improve', bg:'var(--improve)', text:'#fff', soft:'var(--improve-bg)', fg:'var(--improve)'};
+}
+
+function resultLabel(val){
+  // แปลงผลดิบจากชีตให้เป็น 1 ใน 3 ระดับมาตรฐาน เพื่อแสดงผลและกรองข้อมูล
+  if(!val) return '';
+  const v = val.trim();
+  if(v.includes('ดีเยี่ยม')) return 'ดีเยี่ยม';
+  if(v==='ดี' || v.includes('ดี ')) return 'ดี';
+  return 'ต้องพัฒนา';
 }
 
 function overallScore(school){
   const vals = school.dims.map(d=>d.result).filter(Boolean);
   if(vals.length===0) return null;
   const weight = v=>{
-    if(v.includes('ดีเยี่ยม')) return 4;
-    if(v==='ดี') return 3;
-    if(v.includes('พอใช้')) return 2;
-    if(v.includes('ปรับปรุง')) return 1;
-    return 0;
+    if(v.includes('ดีเยี่ยม')) return 3;
+    if(v==='ดี' || v.includes('ดี ')) return 2;
+    return 1; // พอใช้ / ปรับปรุง / อื่นๆ ถือเป็นต้องพัฒนา
   };
   const avg = vals.reduce((a,v)=>a+weight(v),0)/vals.length;
-  if(avg>=3.5) return 'ดีเยี่ยม';
-  if(avg>=2.5) return 'ดี';
-  if(avg>=1.5) return 'พอใช้';
-  return 'ปรับปรุง';
+  if(avg>=2.5) return 'ดีเยี่ยม';
+  if(avg>=1.5) return 'ดี';
+  return 'ต้องพัฒนา';
 }
 
 function escapeHtml(s){
@@ -577,10 +613,9 @@ function applyFilters(){
     if(net && s.network !== net) return false;
     if(res){
       const overall = overallScore(s) || '';
-      if(res==='ปรับปรุง'){ if(!overall.includes('ปรับปรุง')) return false; }
-      else if(overall !== res) return false;
+      if(overall !== res) return false;
     }
-    return false === false; // keep
+    return true;
   });
 
   renderHero();
@@ -645,7 +680,7 @@ function renderOverview(){
     card.addEventListener('click', ()=>{
       const no = card.getAttribute('data-no');
       const school = filtered.find(s=>String(s.no)===no);
-      if(school) openModal(school);
+      if(school) openDetail(school);
     });
   });
 }
@@ -664,7 +699,8 @@ function renderTable(){
     const subDims = s.dims.slice(6);
     const mainPills = mainDims.map(d=>{
       const c = resultColor(d.result);
-      return `<span class="result-pill" style="background:${c.soft};color:${c.fg};" title="${escapeHtml(d.label)}">${d.result ? escapeHtml(d.result.length>4?d.result.slice(0,2):d.result) : '–'}</span>`;
+      const lbl = resultLabel(d.result);
+      return `<span class="result-pill" style="background:${c.soft};color:${c.fg};" title="${escapeHtml(d.label)}">${lbl ? escapeHtml(lbl) : '–'}</span>`;
     }).join(' ');
     const subPills = subDims.slice(0,5).map(d=>{
       const c = resultColor(d.result);
@@ -687,39 +723,105 @@ function renderTable(){
   tbody.querySelectorAll('.expand-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const idx = parseInt(btn.getAttribute('data-idx'));
-      openModal(schools[idx]);
+      openDetail(schools[idx]);
     });
   });
 }
 
-function openModal(school){
-  document.getElementById('modalTitle').textContent = school.name;
-  document.getElementById('modalSub').textContent =
-    `${school.network || '—'} · ผู้บริหาร: ${school.principal || '—'} · นิเทศโดย ${school.supervisor || '—'} · ${school.date || 'ยังไม่นิเทศ'}`;
-
-  const body = document.getElementById('modalBody');
-  if(school.dims.every(d=>!d.result)){
-    body.innerHTML = `<div class="empty-state"><div class="emoji">📋</div>ยังไม่มีข้อมูลผลการนิเทศสำหรับโรงเรียนนี้</div>`;
-  } else {
-    body.innerHTML = `<div class="modal-grid">` + school.dims.map(d=>{
-      const c = resultColor(d.result);
-      return `
-      <div class="modal-item">
-        <div class="label">${escapeHtml(d.full)}</div>
-        <span class="result-pill" style="background:${c.soft};color:${c.fg};margin-top:6px;display:inline-block;">${escapeHtml(d.result || 'ยังไม่นิเทศ')}</span>
-        ${d.detail ? `<div class="note">${escapeHtml(d.detail)}</div>` : ''}
-      </div>`;
-    }).join('') + `</div>`;
-  }
-  document.getElementById('modalOverlay').classList.add('show');
+// คะแนนตัวเลขสำหรับกราฟ: ดีเยี่ยม=3, ดี=2, ต้องพัฒนา=1, ไม่มีข้อมูล=0
+function scoreOf(result){
+  if(!result) return 0;
+  const lbl = resultLabel(result);
+  if(lbl==='ดีเยี่ยม') return 3;
+  if(lbl==='ดี') return 2;
+  return 1;
 }
 
-document.getElementById('modalClose').addEventListener('click', ()=>{
-  document.getElementById('modalOverlay').classList.remove('show');
-});
-document.getElementById('modalOverlay').addEventListener('click', (e)=>{
-  if(e.target.id==='modalOverlay') document.getElementById('modalOverlay').classList.remove('show');
-});
+function openDetail(school){
+  const overall = overallScore(school);
+  const c = resultColor(overall);
+
+  // สถิติสรุป
+  const answered = school.dims.filter(d=>d.result);
+  const excellentCount = answered.filter(d=>resultLabel(d.result)==='ดีเยี่ยม').length;
+  const goodCount = answered.filter(d=>resultLabel(d.result)==='ดี').length;
+  const improveCount = answered.filter(d=>resultLabel(d.result)==='ต้องพัฒนา').length;
+
+  let html = `
+    <div class="detail-header">
+      <h2>${escapeHtml(school.name)}</h2>
+      <div class="meta-row">
+        <span>🏘️ ${escapeHtml(school.network || '—')}</span>
+        <span>👤 ผู้บริหาร: ${escapeHtml(school.principal || '—')}</span>
+        <span>📝 นิเทศโดย: ${escapeHtml(school.supervisor || '—')}</span>
+        <span>📅 ${escapeHtml(school.date || 'ยังไม่นิเทศ')}</span>
+      </div>
+      ${overall ? `<div class="detail-overall-badge">ผลรวม: ${escapeHtml(overall)}</div>` : ''}
+    </div>`;
+
+  if(answered.length === 0){
+    html += `<div class="empty-state"><div class="emoji">📋</div>ยังไม่มีข้อมูลผลการนิเทศสำหรับโรงเรียนนี้</div>`;
+  } else {
+    html += `
+    <div class="detail-stats-row">
+      <div class="detail-stat-card">
+        <div class="num" style="color:var(--excellent);">${excellentCount}</div>
+        <div class="lbl">ด้านที่ได้ "ดีเยี่ยม"</div>
+      </div>
+      <div class="detail-stat-card">
+        <div class="num" style="color:var(--good);">${goodCount}</div>
+        <div class="lbl">ด้านที่ได้ "ดี"</div>
+      </div>
+      <div class="detail-stat-card">
+        <div class="num" style="color:var(--improve);">${improveCount}</div>
+        <div class="lbl">ด้านที่ "ต้องพัฒนา"</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>📊 กราฟเปรียบเทียบผลการนิเทศรายด้าน (${school.dims.length} ด้าน)</h3>
+      ${school.dims.map(d=>{
+        const dc = resultColor(d.result);
+        const sc = scoreOf(d.result);
+        const pct = sc===0 ? 6 : Math.round(sc/3*100);
+        const lbl = resultLabel(d.result) || 'ยังไม่นิเทศ';
+        return `
+        <div class="chart-row">
+          <div class="chart-label" title="${escapeHtml(d.full)}">${escapeHtml(d.label)}</div>
+          <div class="chart-track">
+            <div class="chart-fill" style="width:${pct}%; background:${dc.bg};"></div>
+          </div>
+          <div class="chart-val" style="color:${dc.fg};">${escapeHtml(lbl)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="detail-section-title">รายละเอียดแต่ละด้าน</div>
+    <div class="detail-cards-grid">
+      ${school.dims.map(d=>{
+        const dc = resultColor(d.result);
+        return `
+        <div class="detail-card">
+          <div class="dc-label">${escapeHtml(d.full)}</div>
+          <span class="result-pill" style="background:${dc.soft};color:${dc.fg};display:inline-block;">${escapeHtml(resultLabel(d.result) || 'ยังไม่นิเทศ')}</span>
+          ${d.detail ? `<div class="dc-note">${escapeHtml(d.detail)}</div>` : ''}
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  document.getElementById('detailContent').innerHTML = html;
+  document.getElementById('mainViews').style.display = 'none';
+  document.getElementById('detailSection').style.display = '';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function closeDetail(){
+  document.getElementById('detailSection').style.display = 'none';
+  document.getElementById('mainViews').style.display = '';
+}
+
+document.getElementById('detailBackBtn').addEventListener('click', closeDetail);
 
 document.getElementById('searchInput').addEventListener('input', applyFilters);
 document.getElementById('networkSelect').addEventListener('change', applyFilters);
